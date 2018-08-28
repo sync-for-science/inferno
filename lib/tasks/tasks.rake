@@ -37,43 +37,50 @@ task :tests_to_csv do
 end
 
 desc 'Execute sequence against a FHIR server'
-task :execute_sequence, [:sequence, :server] do |task, args|
+task :execute_sequence, [:sequences, :server] do |task, args|
 
-  @sequence = nil
-  SequenceBase.ordered_sequences.map do |seq|
-    if seq.sequence_name == args[:sequence]
-      @sequence = seq
+  @sequences = []
+  input_sequences = args[:sequences].split(" ")
+  input_sequences.each do |seq_arg|
+    SequenceBase.ordered_sequences.map do |seq|
+      if seq.sequence_name == seq_arg
+        @selected_sequence = seq
+        if @selected_sequence == nil
+          puts "Sequence #{seq_arg} not found. Valid sequences are:
+                  Conformance,
+                  DynamicRegistration,
+                  PatientStandaloneLaunch,
+                  ProviderEHRLaunch,
+                  OpenIDConnect,
+                  TokenIntrospection,
+                  TokenRefresh,
+                  ArgonautDataQuery,
+                  ArgonautProfiles,
+                  AdditionalResources"
+          exit
+        else
+          @sequences << @sequence
+        end
+      end
     end
   end
 
-  if @sequence == nil
-    puts "Sequence not found. Valid sequences are:
-            Conformance,
-            DynamicRegistration,
-            PatientStandaloneLaunch,
-            ProviderEHRLaunch,
-            OpenIDConnect,
-            TokenIntrospection,
-            TokenRefresh,
-            ArgonautDataQuery,
-            ArgonautProfiles,
-            AdditionalResources"
-    exit
-  end
-
-  instance = TestingInstance.new(url: args[:server])
-  instance.save!
-  client = FHIR::Client.new(args[:server])
-  client.use_dstu2
-  client.default_json
-  sequence_instance = @sequence.new(instance, client, true)
-  sequence_result = sequence_instance.start
-  
-  sequence_result.test_results.each do |result|
-    puts "Test Name: " + result.name + "\n" +
-         "Test Result: " + result.result + "\n" +
-         "Test Result Message: " + result.message + "\n" +
-         "Test Description: " + result.description + "\n\n"
+  @sequences.each do |seq_to_run|
+    instance = TestingInstance.new(url: args[:server])
+    instance.save!
+    client = FHIR::Client.new(args[:server])
+    client.use_dstu2
+    client.default_json
+    sequence_instance = seq_to_run.new(instance, client, true)
+    sequence_result = sequence_instance.start
+    
+    puts "Sequence: " + seq_to_run.sequence_name
+    sequence_result.test_results.each do |result|
+      puts "\t Test Name: " + result.name + "\n" +
+          "\t Test Result: " + result.result + "\n" +
+          "\t Test Result Message: " + result.message + "\n" +
+          "\t Test Description: " + result.description + "\n\n"
+    end
   end
     
   
