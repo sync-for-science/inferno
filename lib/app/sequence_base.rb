@@ -4,6 +4,9 @@ require_relative 'utils/logged_rest_client'
 require_relative 'utils/exceptions'
 require_relative 'utils/validation'
 
+require 'pry'
+require 'selenium-webdriver'
+
 module Inferno
   module Sequence
     class SequenceBase
@@ -340,6 +343,46 @@ module Inferno
             result.result = STATUS[:wait]
             result.wait_at_endpoint = e.endpoint
             result.redirect_to_url = e.url
+            options = Selenium::WebDriver::Chrome::Options.new
+            options.add_argument('--headless')
+            options.add_argument('--disable-gpu')
+            options.add_argument('--remote-debugging-port=9222')
+
+            driver = Selenium::WebDriver.for :chrome, options: options
+            driver.navigate.to e.url
+
+            wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+            email_input = wait.until {
+              email_element = driver.find_element(name: 'email')
+              email_element if email_element.displayed?
+            }
+            email_input.send_keys("inferno@groups.mitre.org")
+            
+            password_input = wait.until {
+              password_element = driver.find_element(name: 'password')
+              password_element if password_element.displayed?
+            }
+            password_input.send_keys("Crucible2Inferno")
+
+            submit_elements = driver.find_elements(tag_name: "button")
+            submit_elements[3].click
+
+            
+            clickable_patients = wait.until {
+              patient_elements = driver.find_elements(class: "patient-row")
+              patient_elements if patient_elements.length != 0
+            }
+
+            clickable_patients[0].click
+
+            # authorize = wait.until {
+            #   auth_button = driver.find_element(name: "authorize")
+            #   authorize if authorize != nil
+            # }
+
+            # authorize.click
+
+            binding.pry
 
           rescue SkipException => e
             result.result = STATUS[:skip]

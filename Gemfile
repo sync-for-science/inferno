@@ -18,5 +18,6 @@ gem 'webmock'
 gem 'rack-test'
 gem 'json-jwt'
 gem 'colorize'
+gem 'selenium-webdriver'
 
 gem 'simplecov', require: false, group: :test
