@@ -4,6 +4,8 @@ require_relative 'utils/logged_rest_client'
 require_relative 'utils/exceptions'
 require_relative 'utils/validation'
 
+require 'selenium-webdriver'
+
 module Inferno
   module Sequence
     class SequenceBase
@@ -36,7 +38,7 @@ module Inferno
 
       @@inactive = {}
 
-      def initialize(instance, client, disable_tls_tests = false, sequence_result = nil, standalone_launch_config = nil)
+      def initialize(instance, client, disable_tls_tests = false, sequence_result = nil)
         @client = client
         @instance = instance
         @client.set_bearer_token(@instance.token) unless (@client.nil? || @instance.nil? || @instance.token.nil?)
@@ -44,7 +46,6 @@ module Inferno
         @sequence_result = sequence_result
         @disable_tls_tests = disable_tls_tests
         @test_warnings = []
-        @standalone_launch_config = standalone_launch_config
       end
 
       def resume(request = nil, headers = nil, params = nil, &block)
@@ -357,17 +358,21 @@ module Inferno
 
             wait = Selenium::WebDriver::Wait.new(:timeout => 15)
 
-            if e.config != nil 
-              script = e.config
+            if script = @instance.standalone_launch_script != nil 
               script.each do |command|
                 current_element = wait.until {
-                  current = driver.send(command['cmd'], {command['find_type']: command['value']})
-                  current if current_element.displayed?
-                }
-                if command['index'] != nil
-                  current_element[command['index']].send(command['action'])
-                else
-                  current_element.send(command['action'], command['value'])
+                      current = driver.find_element({command['type'].to_sym => command['find_value']})
+                      current if current_element.displayed?
+                } 
+                case command['cmd']
+                when 'send_keys'
+                  current_element.send_keys(command['value'])
+                when 'click'
+                  if command['index'] != nil
+                    current_element[command['index']].click(command['value'])
+                  else
+                    current_element.click(command['value'])
+                  end
                 end
               end 
             end
@@ -405,8 +410,8 @@ module Inferno
         raise WaitException.new endpoint
       end
 
-      def redirect(url, endpoint, config)
-        raise RedirectException.new url, endpoint, config
+      def redirect(url, endpoint)
+        raise RedirectException.new url, endpoint
       end
 
       def warning
