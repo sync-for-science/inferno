@@ -2,16 +2,23 @@ module Inferno
   module Sequence
     class PatientStandaloneLaunchSequence < SequenceBase
 
-      title 'Patient Standalone Launch Sequence'
-      description 'Demonstrate the Patient Standalone Launch Sequence.'
-      test_id_prefix 'PSLS'
+      title 'Standalone Launch Sequence'
+      description 'Demonstrate the Standalone Launch Sequence.'
+      test_id_prefix 'SLS'
 
       requires :client_id, :confidential_client, :client_secret, :oauth_authorize_endpoint, :oauth_token_endpoint, :scopes, :initiate_login_uri, :redirect_uris
       defines :token, :id_token, :refresh_token, :patient_id
 
-      preconditions 'Client must be registered' do
-        !@instance.client_id.nil?
-      end
+      details %(
+        # Background
+
+        Applications that use SMART on FHIR for authorization and that are not launched from
+        within the context of an EHR use the [Standalone Launch Sequence](http://docs.smarthealthit.org/authorization/).
+        The primary technical difference between this launch sequence and its alternative, the EHR launch sequence, is
+        that the user initiates the OAuth 2.0 authorization proces, perhaps by clicking on an icon to launch the app.  Inferno
+        similarly initiates this test when the user begins running the test.
+
+      )
 
       test 'OAuth 2.0 authorize endpoint secured by transport layer security' do
 

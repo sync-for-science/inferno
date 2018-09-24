@@ -9,13 +9,32 @@ module Inferno
       details %(
         # Background
 
-        The #{title} Sequence tests the authorization server to dynamically register OAuth 2.0 clients using
-        the [OAuth 2.0 Dynamic Client Registration Protocol](https://tools.ietf.org/html/rfc7591).  This
-        functionality is *OPTIONAL* but is recommended by the SMART App Launch framework.
+        An app that is requesting patient data on behalf of the user must first be registered with the EHR's authorization service.  This
+        can either be done manually, typically through a web interface provided to the app developer, or
+        programatically using the [OAuth 2.0 Dynamic Client Registration Protocol](https://tools.ietf.org/html/rfc7591).
+        This functionality is *OPTIONAL* but is recommended by the SMART App Launch framework.
+
+        Dynamic registration is typically used in one of two ways:
+
+        * As a method to reduce the burden of registering an app manually for each EHR's authorization service.
+        * As a method to register each app *instance* to improve security of secrets in confidential apps.
 
         # Test Methodology
 
-        This sequence tests tests this functionality by dynamically an app for Inferno to use in later sequences.
+        This sequence tests Dynamic Registration by registering a single instance of this Inferno application.  It allows the
+        user to dynamically register a public or confidential client and specify which scopes to allow for this client.  If successful, the state of the
+        application is updated to store the client id, scopes, and if necessary, the the client secret.  This information is used
+        in later tests for the app launch sequences.
+
+        The SMART App Launch guide requires the implementation of both public and confidential client functionality within the
+        authorization service.  Since this sequence does not automatically register both types of clients, users should run this sequence using both
+        methods to ensure that the application is capable of registering both modes.  Similarly, the default scopes represent the most permissive allowed
+        by the Smart App Launch guide.  Users should alter this scope depending on the nature of the tests.
+
+        Althought requiring users to manually perform each of these combinations may be combersome for mature implementations, it allows developers to incrementally
+        test different combinations quickly without burdening their system with potentially thousands of tests.  The command line features of Inferno
+        allow users to define scripts that perform each of these permutations, and the web interface may provide this functionality in the future.
+
 
       )
 
