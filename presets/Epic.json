@@ -1,0 +1,19 @@
+{
+  "server": "https://open-ic.epic.com/Argonaut/api/FHIR/Argonaut",
+  "module": "onc",
+  "arguments": {
+    "client_id": "94bdc785-64af-4e7e-87be-b7a285e9c1d6",
+    "confidential_client": "true",
+    "client_secret": "onc",
+    "scopes": "launch/patient patient/*.read offline_access",
+    "redirect_uris": "http://tests.dev.syncfor.science:9003/authorized/",
+    "standalone_launch_script": [
+      {"cmd": "send_keys", "type": "id", "find_value": "Login", "value": "fhirjason"},
+      {"cmd": "send_keys", "type": "id", "find_value": "Password", "value": "epicepic1"},
+      {"cmd": "click", "type": "id", "find_value": "submit"},
+      {"cmd": "click", "type": "id", "find_value": "continueButton"},
+      {"cmd": "click", "type": "css", "find_value": "label[for=termsOfUseCheckbox]"},
+      {"cmd": "click", "type": "name", "find_value": "allowDataSharing"}
+    ]
+  }
+}

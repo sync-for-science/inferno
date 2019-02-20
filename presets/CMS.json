@@ -1,0 +1,17 @@
+{
+  "server": "https://sandbox.bluebutton.cms.gov/v1/fhir",
+  "module": "bluebutton_demo",
+  "arguments": {
+    "client_id": "CyoUBUTARbvicAujJjeNwPF6bKeKMywUrJSbfnp8",
+    "confidential_client": "true",
+    "client_secret": "hiD2RapR14bkdPERUnyPXEUoWA1fKLitoacHvmyI3igAmXuMbV8JenQjo6LI1lQwuEeToHzbameF8dIth2QxZ0KVswAXzGKe3yWMwbhGcri4pXAVAeAe5zmaQPWgyJYP",
+    "scopes": "profile patient/Patient.read patient/ExplanationOfBenefit.read patient/Coverage.read",
+    "redirect_uris": "http://tests.dev.syncfor.science:9003/authorized/",
+    "standalone_launch_script": [
+      {"cmd": "send_keys", "type": "id", "find_value": "SWEUserName", "value": "BBUser00000"},
+      {"cmd": "send_keys", "type": "id", "find_value": "SWEPassword", "value": "PW00000!"},
+      {"cmd": "click", "type": "id", "find_value": "SignIn"},
+      {"cmd": "click", "type": "id", "find_value": "approve"}
+    ]
+  }
+}

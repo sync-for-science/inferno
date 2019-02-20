@@ -1,0 +1,17 @@
+{
+  "server": "https://fhir-sandbox.healow.com/apps/api/v1/fhir",
+  "module": "onc",
+  "arguments": {
+    "client_id": "c0c7c76d30bd3dcaefc96f40275bdc0a",
+    "confidential_client": "true",
+    "client_secret": "f9d08bf18de3ea87603c54ee50fbc495",
+    "scopes": "launch/patient patient/*.read offline_access",
+    "redirect_uris": "http://tests.dev.syncfor.science:9003/authorized/",
+    "standalone_launch_script": [
+      {"cmd": "send_keys", "type": "id", "find_value": "uname", "value": "user2"},
+      {"cmd": "send_keys", "type": "id", "find_value": "password", "value": "Password2"},
+      {"cmd": "click", "type": "id", "find_value": "btnSubmit"},
+      {"cmd": "click", "type": "id", "find_value": "grant_clicked"}
+    ]
+  }
+}

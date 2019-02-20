@@ -1,0 +1,17 @@
+{
+  "server": "https://apis-test.followmyhealth.com/fhir-uat/api",
+  "module": "onc",
+  "arguments": {
+    "client_id": "90d4ed27-4790-4a3e-80c2-436d1942d680",
+    "confidential_client": "true",
+    "client_secret": "Ym0ZYTtSjrQM7ZqLfkMKuj1exRmuIKbBCQR+HDoDQgtEb4ZiDhyE1dDk9S3h2vfMRdxvzV18KMhv7Fz0dPiP6w==",
+    "scopes": "launch/patient patient/*.read offline_access",
+    "redirect_uris": "http://tests.dev.syncfor.science:9003/authorized/",
+    "standalone_launch_script": [
+      {"cmd": "click", "type": "css", "find_value": "[translate=DEFAULT_LOGIN_BUTTON]"},
+      {"cmd": "send_keys", "type": "id", "find_value": "UserName", "value": "floppyrobot10"},
+      {"cmd": "send_keys", "type": "id", "find_value": "Password", "value": "s4s_pilot!"},
+      {"cmd": "click", "type": "css", "find_value": "[translate='Login_LogIn']"}
+    ]
+  }
+}

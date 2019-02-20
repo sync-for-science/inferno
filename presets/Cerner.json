@@ -1,0 +1,17 @@
+{
+  "server": "https://fhir-myrecord.sandboxcerner.com/dstu2/0b8a0111-e8e6-4c26-a91c-5069cbc6b1ca",
+  "module": "onc",
+  "arguments": {
+    "client_id": "27208b74-adbb-4341-a72a-1bb6790d40e8",
+    "confidential_client": "true",
+    "client_secret": "D86P1st45vg1xy2lccLqUHkw_k8X8idG",
+    "scopes": "launch/patient patient/Patient.read patient/Encounter.read patient/Observation.read patient/Condition.read patient/MedicationOrder.read patient/MedicationStatement.read patient/AllergyIntolerance.read patient/Procedure.read patient/Immunization.read user/Practitioner.read offline_access",
+    "redirect_uris": "http://tests.dev.syncfor.science:9003/authorized/",
+    "standalone_launch_script": [
+      {"cmd": "send_keys", "type": "id", "find_value": "id_login_username", "value": "fredrick_smart"},
+      {"cmd": "send_keys", "type": "id", "find_value": "id_login_password", "value": "Cerner01"},
+      {"cmd": "click", "type": "id", "find_value": "signin"},
+      {"cmd": "click", "type": "id", "find_value": "allow"}
+    ]
+  }
+}
